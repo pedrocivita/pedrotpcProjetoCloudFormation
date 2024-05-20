@@ -8,29 +8,35 @@
 ## Sumário
 
 - [Documentação do Projeto Final - CloudFormation](#documentação-do-projeto-final---cloudformation)
-    - [Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper](#computação-em-nuvem-6º-semestre---engenharia-de-computação-insper)
-    - [Pedro Toledo Piza Civita - Maio de 2024](#pedro-toledo-piza-civita---maio-de-2024)
-  - [Sumário](#sumário)
+
   - [Objetivo](#objetivo)
+    
   - [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
     - [Descrição da Arquitetura](#descrição-da-arquitetura)
+
   - [Decisões Técnicas](#decisões-técnicas)
     - [Escolha da Região](#escolha-da-região)
     - [Tipos de Instância](#tipos-de-instância)
     - [Configurações de Auto Scaling](#configurações-de-auto-scaling)
     - [Configurações de Segurança](#configurações-de-segurança)
+      
   - [Guia Passo a Passo](#guia-passo-a-passo)
     - [Configuração Inicial](#configuração-inicial)
     - [Detalhes do Script de Configuração](#detalhes-do-script-de-configuração)
     - [Testes de Carga com Locust](#testes-de-carga-com-locust)
     - [Destruir a Infraestrutura](#destruir-a-infraestrutura)
     - [Detalhes do Script de Limpeza](#detalhes-do-script-de-limpeza)
+      
   - [Análise de Custo](#análise-de-custo)
     - [Estimativa de Custos Mensais](#estimativa-de-custos-mensais)
     - [Análise Real de Custos](#análise-real-de-custos)
+      
   - [Repositório do Código](#repositório-do-código)
+    
   - [Conclusão](#conclusão)
+    
   - [Tempo Estimado para Execução das Ações](#tempo-estimado-para-execução-das-ações)
+    
   - [Comandos Utilizados](#comandos-utilizados)
     - [Criação e Gerenciamento do Bucket S3](#criação-e-gerenciamento-do-bucket-s3)
     - [Gerenciamento da Stack CloudFormation](#gerenciamento-da-stack-cloudformation)
