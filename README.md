@@ -1,15 +1,19 @@
 # Documentação do Projeto Final - CloudFormation
 
-## Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper
-## Pedro Toledo Piza Civita - Maio de 2024
+### Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper
+### Pedro Toledo Piza Civita - Maio de 2024
 
 ---
 
 ## Sumário
 
 - [Documentação do Projeto Final - CloudFormation](#documentação-do-projeto-final---cloudformation)
+    - [Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper](#computação-em-nuvem-6º-semestre---engenharia-de-computação-insper)
+    - [Pedro Toledo Piza Civita - Maio de 2024](#pedro-toledo-piza-civita---maio-de-2024)
+  - [Sumário](#sumário)
   - [Objetivo](#objetivo)
   - [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
+    - [Descrição da Arquitetura](#descrição-da-arquitetura)
   - [Decisões Técnicas](#decisões-técnicas)
     - [Escolha da Região](#escolha-da-região)
     - [Tipos de Instância](#tipos-de-instância)
@@ -38,13 +42,25 @@
 
 ## Objetivo
 
-Este projeto tem como objetivo provisionar uma arquitetura na AWS utilizando o CloudFormation, que engloba o uso de um Application Load Balancer (ALB), instâncias EC2 com Auto Scaling e um banco de dados DynamoDB. A meta é garantir alta disponibilidade, escalabilidade e desempenho da aplicação.
+Provisionar uma arquitetura na AWS utilizando o CloudFormation, que englobe o uso de um Application Load Balancer (ALB), instâncias EC2 com Auto Scaling e um banco de dados DynamoDB. O objetivo é garantir alta disponibilidade, escalabilidade e desempenho da aplicação.
 
 ## Diagrama da Arquitetura AWS
 
-![Diagrama da Arquitetura](link_do_diagrama)
+As imagens abaixo representam a arquitetura AWS criada para este projeto:
 
-> *Insira aqui um diagrama detalhado da arquitetura AWS que você criou. Ferramentas como draw.io ou Lucidchart são recomendadas para criar este diagrama.*
+![Diagrama da Arquitetura AWS](attachment1.png)
+![Diagrama da Arquitetura AWS](attachment2.png)
+
+### Descrição da Arquitetura
+
+1. **VPC**: Criação de uma VPC (Virtual Private Cloud) para isolar a rede da aplicação.
+2. **Subnets**: Três subnets públicas para hospedar instâncias EC2.
+3. **Internet Gateway**: Para permitir a comunicação entre a VPC e a internet.
+4. **Route Table**: Tabela de rotas para direcionar o tráfego da internet para as subnets públicas.
+5. **Security Groups**: Regras de firewall para controlar o tráfego de entrada e saída das instâncias EC2 e do ALB.
+6. **Application Load Balancer (ALB)**: Para distribuir o tráfego entre as instâncias EC2.
+7. **Auto Scaling Group**: Para gerenciar a quantidade de instâncias EC2 com base na demanda.
+8. **DynamoDB**: Banco de dados NoSQL para armazenar os dados da aplicação.
 
 ## Decisões Técnicas
 
@@ -199,7 +215,9 @@ Após a implementação e o teste da infraestrutura, foram verificados os custos
 | Recurso                    | Custo Real Mensal     |
 |----------------------------|-----------------------|
 | EC2 Instances              | $YY.XX                |
-| Application Load Balancer  | $YY.XX                |
+| Application
+
+ Load Balancer  | $YY.XX                |
 | DynamoDB                   | $YY.XX                |
 | **Total**                  | $YY.XX                |
 
@@ -211,9 +229,7 @@ O código do CloudFormation e os scripts utilizados estão disponíveis no segui
 
 ## Conclusão
 
-Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura na AWS utilizando o CloudFormation, garantindo alta disponibilidade e escalabilidade através do uso de ALB, Auto Scaling Group e DynamoDB. A análise de custo
-
- e os testes de carga forneceram insights valiosos sobre o desempenho e os custos da infraestrutura, permitindo otimizações futuras.
+Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura na AWS utilizando o CloudFormation, garantindo alta disponibilidade e escalabilidade através do uso de ALB, Auto Scaling Group e DynamoDB. A análise de custo e os testes de carga forneceram insights valiosos sobre o desempenho e os custos da infraestrutura, permitindo otimizações futuras.
 
 ## Tempo Estimado para Execução das Ações
 
