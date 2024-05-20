@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Contatos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4caff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1, h2 {
+            color: #5d5dbd;
+        }
+        form {
+            margin-bottom: 20px;
+            background-color: #e4e4e9;
+            padding: 15px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"], input[type="submit"] {
+            width: 90%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4a47a3;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #746cff;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        li {
+            background-color: #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 60%;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 80%;
+        }
+        .contact-info span {
+            margin-right: 20px;
+        }
+        button {
+            background-color: #ff6363;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 80px;  /* Fixed width for consistency */
+        }
+        button:hover {
+            background-color: #af2929;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adicionar Contato</h1>
+    <form method="post">
+        Nome: <input type="text" name="name"><br>
+        Email: <input type="text" name="email"><br>
+        Telefone: <input type="text" name="phone"><br>
+        <input type="submit" name="add" value="Adicionar">
+    </form>
+    <h2>Contatos</h2>
+    {% if contacts %}
+    <ul>
+        {% for contact in contacts %}
+        <li>
+            <div class="contact-info">
+                <span><strong>Nome:</strong> {{ contact['name'] }}</span>
+                <span><strong>Email:</strong> {{ contact['email'] }}</span>
+                <span><strong>Telefone:</strong> {{ contact['phone'] }}</span>
+            </div>
+            <form method="post" style="display: inline;">
+                <input type="hidden" name="delete_id" value="{{ contact['id'] }}">
+                <button type="submit" name="delete">Deletar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Você ainda não tem contatos.</p>
+    {% endif %}
+</body>
+</html>
