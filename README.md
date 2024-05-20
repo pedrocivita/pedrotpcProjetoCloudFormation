@@ -1,6 +1,6 @@
-Aqui está a documentação final com o link para o seu repositório GitHub incluído:
-
-# Documentação do Projeto
+# Documentação do Projeto Final - CloudFormation
+### Computação em Nuvem 6o Semestre - Engenharia de Computação, Insper
+### Pedro Toledo Piza Civita - Maio de 2024
 
 ## Objetivo
 
@@ -13,22 +13,22 @@ Provisionar uma arquitetura na AWS utilizando o CloudFormation, que englobe o us
 ## Decisões Técnicas
 
 ### Escolha da Região
-Escolhemos a região `us-east-1` devido aos custos mais baixos e à proximidade com os usuários finais.
+Foi escolhida a região `us-east-1` devido aos custos mais baixos e à proximidade com os usuários finais.
 
 ### Tipos de Instância
-Utilizamos instâncias `t2.micro` devido ao seu custo-benefício para o ambiente de desenvolvimento e testes iniciais.
+Foram utilizadas instâncias `t2.micro` devido ao seu custo-benefício para o ambiente de desenvolvimento e testes iniciais.
 
 ### Configurações de Auto Scaling
-Utilizamos políticas de escalabilidade baseadas em métricas de CPU para garantir alta disponibilidade e desempenho. A política de escala para cima é acionada quando a utilização da CPU ultrapassa 5%, e a política de escala para baixo é acionada quando a utilização da CPU cai abaixo de 1%.
+Foram utilizadas de escalabilidade baseadas em métricas de CPU para garantir alta disponibilidade e desempenho. A política de escala para cima é acionada quando a utilização da CPU ultrapassa 5%, e a política de escala para baixo é acionada quando a utilização da CPU cai abaixo de 1%.
 
 ### Configurações de Segurança
-Implementamos Security Groups para restringir o acesso às instâncias EC2 e ao DynamoDB.
+Foram implementados Security Groups para restringir o acesso às instâncias EC2 e ao DynamoDB.
 
 ## Guia Passo a Passo
 
 ### Configuração Inicial
 
-1. **Clone o Repositório do GitHub:**
+1. **Clone o Repositório do GitHub e Acesse o Diretório do Projeto:**
 
    ```bash
    git clone https://github.com/pedrocivita/pedrotpcProjetoCloudFormation
@@ -88,7 +88,7 @@ Implementamos Security Groups para restringir o acesso às instâncias EC2 e ao 
 
 ### Estimativa de Custos Mensais
 
-Utilizamos a Calculadora de Custos da AWS para estimar os custos mensais da nossa arquitetura. Os principais componentes incluem:
+Foi utilizada a Calculadora de Custos da AWS para estimar os custos mensais da arquitetura. Os principais componentes incluem:
 
 - **EC2 Instances:** Utilização de instâncias t2.micro para o Auto Scaling Group.
 - **Application Load Balancer:** Para distribuir o tráfego.
@@ -103,7 +103,7 @@ Utilizamos a Calculadora de Custos da AWS para estimar os custos mensais da noss
 
 ### Análise Real de Custos
 
-Após a implementação e o teste da infraestrutura, verificamos os custos reais utilizando as tags configuradas. Os custos reais foram:
+Após a implementação e o teste da infraestrutura, foram verificados os custos reais utilizando as tags configuradas. Os custos reais foram:
 
 | Recurso                    | Custo Real Mensal     |
 |----------------------------|-----------------------|
