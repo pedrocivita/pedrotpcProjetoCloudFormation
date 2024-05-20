@@ -8,9 +8,6 @@
 ## Sumário
 
 - [Documentação do Projeto Final - CloudFormation](#documentação-do-projeto-final---cloudformation)
-  - [Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper](#computação-em-nuvem-6º-semestre---engenharia-de-computação-insper)
-  - [Pedro Toledo Piza Civita - Maio de 2024](#pedro-toledo-piza-civita---maio-de-2024)
-  - [Sumário](#sumário)
   - [Objetivo](#objetivo)
   - [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
   - [Decisões Técnicas](#decisões-técnicas)
