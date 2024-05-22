@@ -115,7 +115,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 0.0.0.0/0  # SSH global; ajuste conforme necessário para segurança
+          CidrIp: 177.170.241.150/32  # SSH restrito ao IP do usuário
 
   SubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
