@@ -8,47 +8,62 @@
 ## Sumário
 
 - [Documentação do Projeto Final - CloudFormation](#documentação-do-projeto-final---cloudformation)
-    - [Computação em Nuvem 6º Semestre - Engenharia de Computação, Insper](#computação-em-nuvem-6º-semestre---engenharia-de-computação-insper)
-    - [Pedro Toledo Piza Civita - Maio de 2024](#pedro-toledo-piza-civita---maio-de-2024)
-  - [Sumário](#sumário)
-  - [Objetivo](#objetivo)
-  - [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
-    - [Descrição da Arquitetura](#descrição-da-arquitetura)
-  - [Decisões Técnicas](#decisões-técnicas)
-    - [Escolha da Região](#escolha-da-região)
-    - [Tipos de Instância](#tipos-de-instância)
-    - [Configurações de Auto Scaling](#configurações-de-auto-scaling)
-    - [Configurações de Segurança](#configurações-de-segurança)
-    - [Balanceamento de Carga](#balanceamento-de-carga)
-    - [Políticas de Escalabilidade](#políticas-de-escalabilidade)
-    - [Banco de Dados NoSQL (DynamoDB)](#banco-de-dados-nosql-dynamodb)
+- [Objetivo](#objetivo)
+- [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
+  - [Versão Simplificada da Arquitetura](#versão-simplificada-da-arquitetura)
+  - [Descrição da Arquitetura](#descrição-da-arquitetura)
+  - [Aplicação: Lista de Contatos](#aplicação-lista-de-contatos)
+    - [Funcionalidades da Aplicação](#funcionalidades-da-aplicação)
+    - [Integração com DynamoDB](#integração-com-dynamodb)
+    - [Objetivo da Aplicação](#objetivo-da-aplicação)
+    - [Interface da Aplicação](#interface-da-aplicação)
+- [Decisões Técnicas](#decisões-técnicas)
+  - [Escolha da Região](#escolha-da-região)
+  - [Tipos de Instância](#tipos-de-instância)
+  - [Configurações de Auto Scaling](#configurações-de-auto-scaling)
+  - [Configurações de Segurança](#configurações-de-segurança)
+  - [Balanceamento de Carga](#balanceamento-de-carga)
+  - [Políticas de Escalabilidade](#políticas-de-escalabilidade)
+  - [Banco de Dados NoSQL (DynamoDB)](#banco-de-dados-nosql-dynamodb)
   - [Pré-requisitos](#pré-requisitos)
-    - [Conta na AWS](#conta-na-aws)
-    - [Ferramentas Necessárias](#ferramentas-necessárias)
-    - [Configuração de Segurança](#configuração-de-segurança)
-    - [Dependências de Software](#dependências-de-software)
-    - [Configuração do Ambiente](#configuração-do-ambiente)
-    - [Repositório do Projeto](#repositório-do-projeto)
-    - [Chave SSH](#chave-ssh)
-    - [Configuração de Permissões IAM](#configuração-de-permissões-iam)
-  - [Guia Passo a Passo](#guia-passo-a-passo)
-    - [Configuração Inicial](#configuração-inicial)
-    - [Detalhes do Script de Configuração](#detalhes-do-script-de-configuração)
-    - [Testes de Carga com Locust](#testes-de-carga-com-locust)
-    - [Destruir a Infraestrutura](#destruir-a-infraestrutura)
-    - [Detalhes do Script de Limpeza](#detalhes-do-script-de-limpeza)
+  - [Conta na AWS](#conta-na-aws)
+  - [Ferramentas Necessárias](#ferramentas-necessárias)
+  - [Dependências de Software](#dependências-de-software)
+    - [Windows](#windows)
+    - [Linux](#linux)
+    - [Mac](#mac)
+  - [Configuração do Ambiente](#configuração-do-ambiente)
+  - [Repositório do Projeto](#repositório-do-projeto)
+  - [Configuração de Permissões IAM](#configuração-de-permissões-iam)
+    - [Passo a Passo para Configurar Permissões IAM](#passo-a-passo-para-configurar-permissões-iam)
+- [Guia Passo a Passo](#guia-passo-a-passo)
+  - [Configuração Inicial](#configuração-inicial)
+  - [Detalhes do Script de Configuração](#detalhes-do-script-de-configuração)
+  - [Testes de Carga com Locust](#testes-de-carga-com-locust)
+  - [Rodar Locust em Modo Headless](#rodar-locust-em-modo-headless)
+  - [Análise dos Testes de Carga](#análise-dos-testes-de-carga)
+  - [Instâncias Após o Scale Down](#instâncias-após-o-scale-down)
+  - [Destruir a Infraestrutura](#destruir-a-infraestrutura)
+  - [Detalhes do Script de Limpeza](#detalhes-do-script-de-limpeza)
   - [Análise de Custo](#análise-de-custo)
     - [Estimativa de Custos Mensais](#estimativa-de-custos-mensais)
+    - [Detalhamento dos Custos:](#detalhamento-dos-custos)
     - [Análise Real de Custos](#análise-real-de-custos)
-  - [Repositório do Código](#repositório-do-código)
-  - [Conclusão](#conclusão)
-  - [Tempo Estimado para Execução das Ações](#tempo-estimado-para-execução-das-ações)
-  - [Comandos Utilizados](#comandos-utilizados)
-    - [Criação e Gerenciamento do Bucket S3](#criação-e-gerenciamento-do-bucket-s3)
-    - [Gerenciamento da Stack CloudFormation](#gerenciamento-da-stack-cloudformation)
-    - [Comandos de Teste e Monitoramento](#comandos-de-teste-e-monitoramento)
-    - [Teste de Carga com Locust](#teste-de-carga-com-locust)
-    - [Comandos de Stress Test](#comandos-de-stress-test)
+    - [Gráfico dos Custos Reais no Console da AWS](#gráfico-dos-custos-reais-no-console-da-aws)
+    - [Gráfico dos Custos Reais Ajustados Para 31 Dias](#gráfico-dos-custos-reais-ajustados-para-31-dias)
+- [Tempo Estimado para Execução das Ações](#tempo-estimado-para-execução-das-ações)
+- [Comandos Utilizados](#comandos-utilizados)
+  - [Criação e Gerenciamento do Bucket S3](#criação-e-gerenciamento-do-bucket-s3)
+  - [Gerenciamento da Stack CloudFormation](#gerenciamento-da-stack-cloudformation)
+  - [Opção para Acessar Instâncias via SSH](#opção-para-acessar-instâncias-via-ssh)
+  - [Comandos de Teste e Monitoramento](#comandos-de-teste-e-monitoramento)
+  - [Teste de Carga com Locust](#teste-de-carga-com-locust)
+  - [Comandos de Stress Test](#comandos-de-stress-test)
+- [Conclusão](#conclusão)
+  - [Pontos Principais](#pontos-principais)
+  - [Próximos Passos](#próximos-passos)
+  - [Agradecimentos](#agradecimentos)
+- [Repositório do Código](#repositório-do-código)
 
 ---
 
@@ -59,6 +74,12 @@ Provisionar uma arquitetura na AWS utilizando o CloudFormation, que englobe o us
 ## Diagrama da Arquitetura AWS
 
 ![AWS Infrastructure](./img/awsInfrastructure.png)
+
+### Versão Simplificada da Arquitetura
+
+Esta versão simplificada da arquitetura destaca os componentes principais e suas conexões essenciais. É uma representação básica que facilita a compreensão do fluxo geral e da estrutura da infraestrutura sem se aprofundar em detalhes complexos.
+
+![AWS Infrastructure Simplificada](./img/awsSimples.png)
 
 ### Descrição da Arquitetura
 
@@ -112,6 +133,30 @@ Provisionar uma arquitetura na AWS utilizando o CloudFormation, que englobe o us
      - Modo de cobrança configurado para PAY_PER_REQUEST, eliminando a necessidade de especificar capacidade de leitura/escrita provisionada.
      - Políticas de IAM associadas às instâncias EC2 para permitir acesso completo ao DynamoDB.
 
+### Aplicação: Lista de Contatos
+
+A aplicação "Lista de Contatos" é um sistema de gerenciamento de contatos desenvolvido com Flask e integrado ao Amazon DynamoDB para armazenamento de dados. A aplicação permite adicionar, visualizar e deletar contatos através de uma interface web simples e intuitiva. 
+
+#### Funcionalidades da Aplicação
+
+1. **Adicionar Contatos**: Os usuários podem adicionar novos contatos fornecendo informações como nome, telefone e e-mail.
+2. **Visualizar Contatos**: A aplicação exibe uma lista de contatos armazenados no DynamoDB.
+3. **Deletar Contatos**: Os usuários têm a opção de deletar contatos da lista.
+
+#### Integração com DynamoDB
+
+A aplicação se comunica com o DynamoDB utilizando a biblioteca `boto3` para Python. Cada contato é armazenado como um item na tabela `ListaDeContatos`, com um identificador único (`id`) para cada registro. A integração permite que a aplicação aproveite a escalabilidade, alta disponibilidade e baixa latência do DynamoDB.
+
+#### Objetivo da Aplicação
+
+O objetivo da aplicação é fornecer um exemplo prático de uma aplicação web que utiliza serviços da AWS para armazenar dados de forma escalável e segura. Ela demonstra como configurar e utilizar uma arquitetura em nuvem com serviços gerenciados da AWS, como EC2, ALB, Auto Scaling e DynamoDB.
+
+#### Interface da Aplicação
+
+Abaixo está a interface da aplicação "Lista de Contatos":
+
+![Interface da Aplicação](img/interfaceApp.png)
+
 ## Decisões Técnicas
 
 ### Escolha da Região
@@ -156,7 +201,7 @@ O DynamoDB foi escolhido como o banco de dados NoSQL devido à sua capacidade de
 
 Essas decisões técnicas foram tomadas para garantir uma arquitetura robusta, segura e altamente disponível, capaz de escalar conforme necessário para atender às demandas da aplicação, enquanto otimiza os custos operacionais e mantém a segurança dos dados e recursos.
 
-## Pré-requisitos
+### Pré-requisitos
 
 Para garantir o funcionamento correto do programa e a implantação bem-sucedida da infraestrutura descrita, são necessários os seguintes pré-requisitos:
 
@@ -176,24 +221,34 @@ Para garantir o funcionamento correto do programa e a implantação bem-sucedida
 - **Git:** Ferramenta de controle de versão Git instalada para clonar o repositório do projeto.
   - [Instruções de instalação do Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-### Configuração de Segurança
-
-- **Par de Chaves SSH:** Um par de chaves SSH deve ser criado e configurado na AWS para permitir o acesso às instâncias EC2.
-  - [Criação de pares de chaves no Amazon EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
-
 ### Dependências de Software
 
-- **Python 3.x:** Certifique-se de que o Python 3.x e o pip (gerenciador de pacotes do Python) estão instalados em seu ambiente local.
+#### Windows
+
+- **Python 3.x:** Instale o Python 3.x e o pip (gerenciador de pacotes do Python) a partir do site oficial.
   - [Instruções de instalação do Python](https://www.python.org/downloads/)
+  
+  ```powershell
+  pip install locust
+  ```
 
-- **Bibliotecas Python:** As seguintes bibliotecas Python devem ser instaladas:
-  - Flask
-  - Boto3
-  - Unzip (para descompactar arquivos)
+#### Linux
 
+- **Python 3.x:** Instale o Python 3.x e o pip utilizando o gerenciador de pacotes de sua distribuição.
+  
   ```bash
-  pip install flask boto3
-  sudo apt-get install unzip
+  sudo apt-get update
+  sudo apt-get install python3 python3-pip
+  pip3 install locust
+  ```
+
+#### Mac
+
+- **Python 3.x:** Instale o Python 3.x e o pip utilizando Homebrew.
+  
+  ```bash
+  brew install python
+  pip3 install locust
   ```
 
 ### Configuração do Ambiente
@@ -204,7 +259,12 @@ Para garantir o funcionamento correto do programa e a implantação bem-sucedida
   aws configure
   ```
 
-  Insira o Access Key ID, Secret Access Key, região padrão (`us-east-1`), e o formato de saída padrão (`json`).
+  Durante a configuração, você será solicitado a inserir as seguintes informações:
+
+  - **AWS Access Key ID:** Insira a sua chave de acesso da AWS.
+  - **AWS Secret Access Key:** Insira a sua chave secreta de acesso da AWS.
+  - **Default region name:** Insira `us-east-1` (ou outra região preferida).
+  - **Default output format:** Insira `json`.
 
 ### Repositório do Projeto
 
@@ -212,20 +272,36 @@ Para garantir o funcionamento correto do programa e a implantação bem-sucedida
 
   ```bash
   git clone https://github.com/pedrocivita/pedrotpcProjetoCloudFormation
-  cd pedrotpcProjetoCloudFormation
   ```
-
-### Chave SSH
-
-- **Configuração da Chave SSH:** Certifique-se de que a chave SSH necessária está disponível em seu ambiente local e é a mesma configurada no par de chaves AWS.
-
-```yaml
-KeyName: pedrotpcKeyPair
-```
 
 ### Configuração de Permissões IAM
 
-- **Permissões IAM:** A role do IAM deve ter permissões adequadas para acessar DynamoDB, S3, CloudWatch, e outros serviços necessários.
+O usuário precisará configurar as seguintes políticas de permissão em sua conta AWS para garantir que a infraestrutura e a aplicação funcionem corretamente:
+
+- **AdministratorAccess**
+- **AmazonDynamoDBFullAccess**
+- **AmazonEC2FullAccess**
+- **AmazonSSMFullAccess**
+- **AWSCloudFormationFullAccess**
+- **AWSCodeDeployFullAccess**
+- **AWSCostAndUsageReportAutomationPolicy**
+- **ElasticLoadBalancingFullAccess**
+- **IAMFullAccess**
+- **IAMUserChangePassword**
+
+#### Passo a Passo para Configurar Permissões IAM
+
+1. Acesse o [Console de Gerenciamento da AWS](https://aws.amazon.com/console/).
+2. Navegue até o serviço **IAM (Identity and Access Management)**.
+3. Crie um novo usuário ou selecione um usuário existente.
+4. Atribua as políticas acima ao usuário selecionado:
+   - Vá para a aba **Permissions**.
+   - Clique em **Add permissions**.
+   - Selecione **Attach policies directly**.
+   - Pesquise e selecione as políticas listadas acima.
+   - Clique em **Next: Review** e depois em **Add permissions**.
+
+Caso o usuário já tenha um usuário configurado, apenas verifique se todas as políticas acima estão atribuídas ao usuário. Isso garantirá que ele tenha as permissões necessárias para criar e gerenciar os recursos descritos no projeto.
 
 Com esses pré-requisitos atendidos, você estará pronto para implantar a infraestrutura e a aplicação utilizando o AWS CloudFormation e outras ferramentas descritas.
 
@@ -301,6 +377,51 @@ O script de configuração realiza as seguintes etapas:
 
    Configure o número de usuários simulados e a taxa de spawn (usuários/segundo). Inicie o teste e observe o comportamento da sua aplicação sob carga.
 
+### Rodar Locust em Modo Headless
+
+Para executar o Locust sem a interface gráfica, utilize o seguinte comando:
+
+   ```bash
+   locust -f locustfile.py --headless -u 500 -r 50 --run-time 10m
+   ```
+
+Este comando executa o teste com 500 usuários, aumentando 50 usuários por segundo, durante um tempo de execução de 10 minutos.
+
+### Análise dos Testes de Carga
+
+Durante o teste de carga com 500 usuários e um ramp up de 50 usuários por segundo por 10 minutos, novas instâncias EC2 foram criadas automaticamente pelo Auto Scaling Group para lidar com o aumento na demanda. Isso mostra que o Auto Scaling está configurado corretamente e está respondendo adequadamente aos aumentos de carga, conforme esperado.
+
+Aqui estão as imagens mostrando as instâncias EC2 durante o teste de carga:
+
+- **Instâncias com Detalhes:**
+![Instâncias com Detalhes](img/instanciasComDetalhes.png)
+
+- **Instâncias sem Detalhes:**
+![Instâncias sem Detalhes](img/instanciasSemDetalhes.png)
+
+Além disso, a interface do Locust forneceu gráficos detalhados do desempenho durante o teste:
+
+![Gráficos Locust](img/graficosLocust.png)
+
+Os gráficos mostram:
+
+1. **Total Requests per Second:** A taxa de solicitações por segundo durante o teste.
+2. **Response Times (ms):** Os tempos de resposta médios e do percentil 95 ao longo do teste.
+3. **Number of Users:** O número de usuários simulados ativos durante o teste.
+
+Durante o teste, o Application Load Balancer (ALB) distribuiu o tráfego de entrada de maneira eficiente entre as instâncias EC2 disponíveis. Algumas instâncias começaram a drenar quando o teste terminou, demonstrando que o sistema de auto scaling conseguiu reduzir o número de instâncias quando a carga diminuiu.
+
+A análise dos alarmes configurados no CloudWatch para monitorar a utilização da CPU foi fundamental. Os alarmes de escalonamento para cima (`ScaleUpPolicy`) e para baixo (`ScaleDownPolicy`) foram eficazes em ajustar a capacidade do Auto Scaling Group conforme necessário.
+
+### Instâncias Após o Scale Down
+
+Após um período de tempo após o teste do Locust, o número de instâncias foi reduzido para uma, conforme mostrado na imagem abaixo, demonstrando a efetividade do Auto Scaling em reduzir a capacidade quando a demanda diminui:
+
+- **Instâncias Após o Scale Down:**
+![Instâncias Após o Scale Down](img/insanciasAposScaleDown.png)
+
+A análise desses testes confirma que a arquitetura está configurada para suportar altos volumes de tráfego, garantindo alta disponibilidade e escalabilidade. A resposta rápida aos aumentos de carga também ajuda a manter a performance da aplicação durante picos de uso.
+
 ### Destruir a Infraestrutura
 
 1. **Executar o Script de Limpeza:**
@@ -336,58 +457,82 @@ O script de limpeza realiza as seguintes etapas:
    aws s3 rb s3://bucket-do-civita --force
    ```
 
-## Análise de Custo
+### Análise de Custo
 
-
-
-### Estimativa de Custos Mensais
+#### Estimativa de Custos Mensais
 
 Foi utilizada a Calculadora de Custos da AWS para estimar os custos mensais da arquitetura. Os principais componentes incluem:
 
-- **EC2 Instances:** Utilização de instâncias t2.micro para o Auto Scaling Group.
+- **EC2 Instances:** Utilização de instâncias `t2.micro` para o Auto Scaling Group.
 - **Application Load Balancer:** Para distribuir o tráfego.
-- **DynamoDB:** Tabela provisionada para armazenamento dos contatos.
+- **Amazon Virtual Private Cloud (VPC):** Para criar uma rede virtual isolada para os recursos AWS.
+- **Amazon CloudWatch:** Para monitoramento e gerenciamento de logs.
+- **DynamoDB:** Banco de dados NoSQL para armazenar dados da aplicação.
+
+#### Detalhamento dos Custos:
+
+- **EC2 Instances:** 
+  - **Cálculo:** 3 instâncias `t2.micro` x $0.0116 por hora x 730 horas por mês = $25.40
+
+- **Application Load Balancer (ALB):**
+  - **Cálculo:** Utilização média resultando em $31.11
+
+- **Amazon Virtual Private Cloud (VPC):**
+  - **Cálculo:** Estimado em $12.78 incluindo transferência de dados e uso de endpoints
+
+- **Amazon CloudWatch:** 
+  - **Cálculo:** Monitoramento e logs resultando em um custo estimado de $3.06
+
+- **DynamoDB:** 
+  - **Cálculo:** 
+    - Armazenamento de dados: 1 GB x $0.25 = $0.25
+    - Gravações: 2 gravações por segundo x $0.00000125 = $6.57
+    - Leituras: 4 leituras por segundo x $0.00000025 = $1.31
+  - **Total DynamoDB:** $8.13
 
 | Recurso                    | Custo Estimado Mensal |
 |----------------------------|-----------------------|
-| EC2 Instances              | $XX.XX                |
-| Application Load Balancer  | $XX.XX                |
-| DynamoDB                   | $XX.XX                |
-| **Total**                  | $XX.XX                |
+| EC2 Instances              | $25.40                |
+| Application Load Balancer  | $31.11                |
+| Amazon Virtual Private Cloud (VPC) | $12.78       |
+| Amazon CloudWatch          | $3.06                 |
+| DynamoDB                   | $8.13                 |
+| **Total**                  | $80.48                |
 
-### Análise Real de Custos
+#### Análise Real de Custos
 
-Após a implementação e o teste da infraestrutura, foram verificados os custos reais utilizando as tags configuradas. Os custos reais foram:
+Após a implementação e o teste da infraestrutura, foram verificados os custos reais utilizando os dados do console da AWS. Os custos reais ajustados para 31 dias foram:
 
 | Recurso                    | Custo Real Mensal     |
 |----------------------------|-----------------------|
-| EC2 Instances              | $YY.XX                |
-| Application
+| Elastic Load Balancing     | $25.07                |
+| EC2-Instâncias             | $23.58                |
+| Amazon Virtual Private Cloud (VPC) | $21.88       |
+| Amazon CloudWatch          | $4.93                 |
+| EC2-Outros                 | $2.19                 |
+| DynamoDB                   | $0.72                 |
+| **Total**                  | $78.38                |
 
- Load Balancer  | $YY.XX                |
-| DynamoDB                   | $YY.XX                |
-| **Total**                  | $YY.XX                |
+As diferenças entre as estimativas e os custos reais foram principalmente devido a variações no uso e tarifas reais da AWS.
 
-As diferenças entre as estimativas e os custos reais foram principalmente devido a [justificativa].
+#### Gráfico dos Custos Reais no Console da AWS
 
-## Repositório do Código
+![Custos Reais](./img/custosReais.png)
 
-O código do CloudFormation e os scripts utilizados estão disponíveis no seguinte repositório do GitHub: [pedrotpcProjetoCloudFormation](https://github.com/pedrocivita/pedrotpcProjetoCloudFormation).
+#### Gráfico dos Custos Reais Ajustados Para 31 Dias
 
-## Conclusão
-
-Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura na AWS utilizando o CloudFormation, garantindo alta disponibilidade e escalabilidade através do uso de ALB, Auto Scaling Group e DynamoDB. A análise de custo e os testes de carga forneceram insights valiosos sobre o desempenho e os custos da infraestrutura, permitindo otimizações futuras.
+![Custos Reais Ajustados](./img/custosReaisAjustados.png)
 
 ## Tempo Estimado para Execução das Ações
 
 | Ação                              | Tempo Estimado            |
 |-----------------------------------|---------------------------|
-| Criação do Bucket S3              | 1-2 minutos               |
-| Upload dos Arquivos para o S3     | 1-2 minutos               |
-| Validação do Template             | 1 minuto                  |
-| Criação da Stack CloudFormation   | 5-10 minutos              |
-| Execução do Script de Limpeza     | 3-5 minutos               |
-| Instalação e Configuração do Locust| 5 minutos                 |
+| Criação do Bucket S3              | 5 segundos               |
+| Upload dos Arquivos para o S3     | 10 segundos               |
+| Validação do Template             | 3 segundos                  |
+| Criação da Stack CloudFormation   | 3-5 minutos              |
+| Execução do Script de Limpeza     | 2-3 minutos               |
+| Instalação e Configuração do Locust| 1 minuto                 |
 
 ## Comandos Utilizados
 
@@ -440,21 +585,33 @@ Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura 
   aws cloudformation delete-stack --stack-name StackDoCivitaApp
   ```
 
+### Opção para Acessar Instâncias via SSH
+
+Se você deseja acessar diretamente as instâncias EC2 para fins de depuração ou manutenção, use o par de chaves SSH `pedrotpcKeyPair` especificado no `LaunchConfiguration`. Para acessar uma instância via SSH, execute o comando abaixo no terminal (Linux/Mac) ou no Git Bash (Windows):
+
+```bash
+ssh -i path/to/pedrotpcKeyPair.pem ec2-user@<Public_IP_da_instância>
+```
+
+Substitua `path/to/pedrotpcKeyPair.pem` pelo caminho do arquivo de chave privada e `<Public_IP_da_instância>` pelo endereço IP público da instância EC2.
+
 ### Comandos de Teste e Monitoramento
+
+Execute os seguintes comandos diretamente na instância EC2 (via SSH) para monitorar e gerenciar o servidor web:
 
 - **Verificar status do servidor web:**
   ```bash
-  sudo systemctl status webserver.service
+  sudo systemctl status flaskapp.service
   ```
 
 - **Iniciar servidor web:**
   ```bash
-  sudo systemctl start webserver.service
+  sudo systemctl start flaskapp.service
   ```
 
 - **Checar logs para erros:**
   ```bash
-  sudo journalctl -u webserver.service
+  sudo journalctl -u flaskapp.service
   ```
 
 - **Verificar a saída do log de UserData:**
@@ -463,6 +620,8 @@ Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura 
   ```
 
 ### Teste de Carga com Locust
+
+Instale e execute Locust no ambiente local (Windows/Linux/Mac):
 
 - **Instalar Locust:**
   ```bash
@@ -479,6 +638,8 @@ Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura 
 
 ### Comandos de Stress Test
 
+Para executar um stress test diretamente na instância EC2 (via SSH), instale e utilize a ferramenta `stress`:
+
 - **Instalar ferramenta de stress:**
   ```bash
   sudo yum install -y stress
@@ -488,3 +649,32 @@ Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura 
   ```bash
   stress --cpu 2 --timeout 300
   ```
+
+Esses comandos ajudarão a garantir que a infraestrutura e a aplicação estejam funcionando corretamente e permitirão testes de carga e monitoramento eficazes.
+
+## Conclusão
+
+Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura robusta na AWS utilizando CloudFormation, assegurando alta disponibilidade e escalabilidade com o uso de Application Load Balancer (ALB), Auto Scaling Group e DynamoDB. O processo incluiu desde a criação e configuração inicial dos recursos até testes de carga e monitoramento para validar a performance e eficiência da infraestrutura.
+
+### Pontos Principais
+
+1. **Provisionamento Automatizado:** Utilizando CloudFormation, conseguimos automatizar a criação e gestão da infraestrutura, garantindo consistência e eficiência no processo de implantação.
+2. **Alta Disponibilidade e Escalabilidade:** A arquitetura configurada com ALB e Auto Scaling Group garantiu que a aplicação pudesse lidar com variações na carga de trabalho de maneira eficiente, mantendo a performance e disponibilidade.
+3. **Integração com DynamoDB:** A escolha do DynamoDB como banco de dados NoSQL proporcionou uma solução escalável e altamente disponível para armazenar os dados da aplicação.
+4. **Análise de Custo:** A análise detalhada dos custos estimados e reais ajudou a entender melhor os gastos envolvidos na manutenção da infraestrutura, possibilitando ajustes e otimizações conforme necessário.
+5. **Testes de Carga e Stress:** Os testes de carga realizados com Locust e os comandos de stress test garantiram que a aplicação pudesse suportar altos volumes de tráfego e que o Auto Scaling estivesse configurado corretamente.
+
+### Próximos Passos
+
+- **Monitoramento Contínuo:** Implementar um sistema de monitoramento contínuo para detectar e resolver problemas proativamente.
+- **Otimização de Custos:** Revisar periodicamente os custos e explorar opções de otimização, como instâncias reservadas ou savings plans, para reduzir gastos.
+- **Melhoria de Segurança:** Continuar melhorando as políticas de segurança e práticas recomendadas para proteger os dados e recursos da aplicação.
+- **Escalabilidade Horizontal:** Explorar técnicas de escalabilidade horizontal, como sharding no DynamoDB, para lidar com aumentos significativos de dados e tráfego.
+
+### Agradecimentos
+
+Gostaria de agradecer aos professores e colegas de classe pelo apoio e orientação ao longo deste projeto. A experiência adquirida será extremamente valiosa para futuros desafios profissionais na área de computação em nuvem.
+
+## Repositório do Código
+
+O código do CloudFormation e os scripts utilizados estão disponíveis no seguinte repositório do GitHub: [pedrotpcProjetoCloudFormation](https://github.com/pedrocivita/pedrotpcProjetoCloudFormation).

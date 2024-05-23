@@ -17,4 +17,4 @@ class UserBehavior(TaskSet):
 class WebsiteUser(HttpUser):
     tasks = [UserBehavior]
     wait_time = between(1, 5)
-    host = "http://StackD-LoadB-K6aTwoTY6Ruh-1803371070.us-east-1.elb.amazonaws.com"
+    host = "http://StackD-LoadB-LLOnOp77SjuU-133890934.us-east-1.elb.amazonaws.com"
