@@ -112,10 +112,6 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0  # Permita tráfego HTTPS se necessário
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 177.170.241.150/32  # SSH restrito ao IP do usuário
 
   SubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -216,7 +212,6 @@ Resources:
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref SecurityGroupWeb
-      KeyName: pedrotpcKeyPair
       IamInstanceProfile: !Ref EC2InstanceProfile
       UserData:
         Fn::Base64: !Sub |

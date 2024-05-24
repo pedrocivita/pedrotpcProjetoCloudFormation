@@ -7,7 +7,6 @@
 
 ## Sumário
 
-- [Documentação do Projeto Final - CloudFormation](#documentação-do-projeto-final---cloudformation)
 - [Objetivo](#objetivo)
 - [Diagrama da Arquitetura AWS](#diagrama-da-arquitetura-aws)
   - [Versão Simplificada da Arquitetura](#versão-simplificada-da-arquitetura)
@@ -39,6 +38,7 @@
 - [Guia Passo a Passo](#guia-passo-a-passo)
   - [Configuração Inicial](#configuração-inicial)
   - [Detalhes do Script de Configuração](#detalhes-do-script-de-configuração)
+  - [Acessar a Aplicação](#acessar-a-aplicação)
   - [Testes de Carga com Locust](#testes-de-carga-com-locust)
   - [Rodar Locust em Modo Headless](#rodar-locust-em-modo-headless)
   - [Análise dos Testes de Carga](#análise-dos-testes-de-carga)
@@ -55,13 +55,9 @@
 - [Comandos Utilizados](#comandos-utilizados)
   - [Criação e Gerenciamento do Bucket S3](#criação-e-gerenciamento-do-bucket-s3)
   - [Gerenciamento da Stack CloudFormation](#gerenciamento-da-stack-cloudformation)
-  - [Opção para Acessar Instâncias via SSH](#opção-para-acessar-instâncias-via-ssh)
-  - [Comandos de Teste e Monitoramento](#comandos-de-teste-e-monitoramento)
   - [Teste de Carga com Locust](#teste-de-carga-com-locust)
-  - [Comandos de Stress Test](#comandos-de-stress-test)
 - [Conclusão](#conclusão)
   - [Pontos Principais](#pontos-principais)
-  - [Próximos Passos](#próximos-passos)
   - [Agradecimentos](#agradecimentos)
 - [Repositório do Código](#repositório-do-código)
 
@@ -108,7 +104,6 @@ Esta versão simplificada da arquitetura destaca os componentes principais e sua
    - **Configuração**:
      - Permitir tráfego HTTP (porta 80) de qualquer lugar.
      - Permitir tráfego HTTPS (porta 443) de qualquer lugar, se necessário.
-     - Permitir tráfego SSH (porta 22) de um IP específico para segurança.
 
 6. **Application Load Balancer (ALB)**:
    - **Propósito**: Distribui automaticamente o tráfego de entrada entre várias instâncias EC2 em múltiplas zonas de disponibilidade, garantindo alta disponibilidade e resiliência.
@@ -176,10 +171,11 @@ Políticas de Auto Scaling foram configuradas com base em métricas de utilizaç
 ### Configurações de Segurança
 
 Um Security Group foi implementado para garantir a segurança das instâncias EC2 e do DynamoDB:
-- **Security Group para EC2:** Este grupo permite acesso à aplicação na porta 80 (HTTP) de qualquer lugar, garantindo que a aplicação web esteja acessível para todos os usuários. O acesso
+- **Security Group para EC2:** Este grupo permite acesso à aplicação na porta 80 (HTTP) de qualquer lugar, garantindo que a aplicação web esteja acessível para todos os usuários. O acesso à porta 443 (HTTPS) também é permitido de qualquer lugar, garantindo comunicação segura quando necessário.
 
- SSH na porta 22 é restrito ao IP específico do administrador (177.170.241.150/32), proporcionando uma camada adicional de segurança ao limitar o acesso administrativo.
-- **Políticas de IAM:** As instâncias EC2 foram configuradas com uma role do IAM que permite acesso completo ao DynamoDB. Isso inclui ações como Scan, GetItem, PutItem, UpdateItem e DeleteItem na tabela `ListaDeContatos`, garantindo que as instâncias possam interagir com o banco de dados conforme necessário.
+- **Políticas de IAM:** As instâncias EC2 foram configuradas com uma role do IAM que permite acesso completo ao DynamoDB. Isso inclui ações como Scan, GetItem, PutItem, UpdateItem e DeleteItem na tabela `ListaDeContatos`, garantindo que as instâncias possam interagir com o banco de dados conforme necessário. Além disso, as políticas de IAM concedem permissões para acessar objetos específicos no S3, permitindo que a aplicação baixe os arquivos necessários durante a inicialização, e permissões para interagir com o CloudWatch para monitoramento e métricas.
+
+Essas configurações asseguram que a aplicação tenha os privilégios necessários para operar corretamente, ao mesmo tempo em que mantém um nível adequado de segurança.
 
 ### Balanceamento de Carga
 
@@ -359,6 +355,31 @@ O script de configuração realiza as seguintes etapas:
    ```bash
    aws cloudformation create-stack --stack-name StackDoCivitaApp --template-body file://full-stack.yaml --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
    ```
+
+### Acessar a Aplicação
+
+Após a criação bem-sucedida da stack, você poderá acessar a aplicação "Lista de Contatos" através do DNS do Application Load Balancer.
+
+1. **Obter o DNS do ALB:**
+
+   Você pode encontrar o DNS do Application Load Balancer na seção de Outputs da stack no console do CloudFormation. O valor do output `ALBDNSName` fornecerá o URL para acessar a aplicação.
+
+2. **Acessar a Aplicação Web:**
+
+   No seu navegador, insira o DNS fornecido pelo ALB. A URL será semelhante a `http://<ALB_DNS_NAME>`, onde `<ALB_DNS_NAME>` é o DNS do seu Application Load Balancer.
+
+3. **Interagir com a Aplicação:**
+
+   Você poderá adicionar, visualizar e deletar contatos através da interface web da aplicação. Os dados inseridos na aplicação serão armazenados no DynamoDB.
+
+4. **Verificar os Dados no DynamoDB:**
+
+   Para verificar os dados inseridos, acesse o console do AWS DynamoDB:
+   - Navegue até o DynamoDB no console da AWS.
+   - Selecione a tabela `ListaDeContatos`.
+   - Visualize os itens na tabela para confirmar que os dados estão sendo inseridos corretamente.
+
+Esses passos garantirão que você possa acessar e interagir com a aplicação "Lista de Contatos" rodando na infraestrutura AWS provisionada pelo CloudFormation.
 
 ### Testes de Carga com Locust
 
@@ -543,7 +564,7 @@ As diferenças entre as estimativas e os custos reais foram principalmente devid
   aws s3 mb s3://bucket-do-civita --region us-east-1
   ```
 
-- **Upload do app 'app.py':**
+- **Upload do app Lista de Contatos:**
   ```bash
   aws s3 cp appFiles/app.py s3://bucket-do-civita/app.py
   ```
@@ -585,40 +606,6 @@ As diferenças entre as estimativas e os custos reais foram principalmente devid
   aws cloudformation delete-stack --stack-name StackDoCivitaApp
   ```
 
-### Opção para Acessar Instâncias via SSH
-
-Se você deseja acessar diretamente as instâncias EC2 para fins de depuração ou manutenção, use o par de chaves SSH `pedrotpcKeyPair` especificado no `LaunchConfiguration`. Para acessar uma instância via SSH, execute o comando abaixo no terminal (Linux/Mac) ou no Git Bash (Windows):
-
-```bash
-ssh -i path/to/pedrotpcKeyPair.pem ec2-user@<Public_IP_da_instância>
-```
-
-Substitua `path/to/pedrotpcKeyPair.pem` pelo caminho do arquivo de chave privada e `<Public_IP_da_instância>` pelo endereço IP público da instância EC2.
-
-### Comandos de Teste e Monitoramento
-
-Execute os seguintes comandos diretamente na instância EC2 (via SSH) para monitorar e gerenciar o servidor web:
-
-- **Verificar status do servidor web:**
-  ```bash
-  sudo systemctl status flaskapp.service
-  ```
-
-- **Iniciar servidor web:**
-  ```bash
-  sudo systemctl start flaskapp.service
-  ```
-
-- **Checar logs para erros:**
-  ```bash
-  sudo journalctl -u flaskapp.service
-  ```
-
-- **Verificar a saída do log de UserData:**
-  ```bash
-  cat /var/log/user-data.log
-  ```
-
 ### Teste de Carga com Locust
 
 Instale e execute Locust no ambiente local (Windows/Linux/Mac):
@@ -636,20 +623,6 @@ Instale e execute Locust no ambiente local (Windows/Linux/Mac):
 - **Acessar a interface do Locust:**
   Abra o navegador e acesse `http://localhost:8089`.
 
-### Comandos de Stress Test
-
-Para executar um stress test diretamente na instância EC2 (via SSH), instale e utilize a ferramenta `stress`:
-
-- **Instalar ferramenta de stress:**
-  ```bash
-  sudo yum install -y stress
-  ```
-
-- **Executar stress test:**
-  ```bash
-  stress --cpu 2 --timeout 300
-  ```
-
 Esses comandos ajudarão a garantir que a infraestrutura e a aplicação estejam funcionando corretamente e permitirão testes de carga e monitoramento eficazes.
 
 ## Conclusão
@@ -662,14 +635,7 @@ Este projeto demonstrou a capacidade de provisionar e gerenciar uma arquitetura 
 2. **Alta Disponibilidade e Escalabilidade:** A arquitetura configurada com ALB e Auto Scaling Group garantiu que a aplicação pudesse lidar com variações na carga de trabalho de maneira eficiente, mantendo a performance e disponibilidade.
 3. **Integração com DynamoDB:** A escolha do DynamoDB como banco de dados NoSQL proporcionou uma solução escalável e altamente disponível para armazenar os dados da aplicação.
 4. **Análise de Custo:** A análise detalhada dos custos estimados e reais ajudou a entender melhor os gastos envolvidos na manutenção da infraestrutura, possibilitando ajustes e otimizações conforme necessário.
-5. **Testes de Carga e Stress:** Os testes de carga realizados com Locust e os comandos de stress test garantiram que a aplicação pudesse suportar altos volumes de tráfego e que o Auto Scaling estivesse configurado corretamente.
-
-### Próximos Passos
-
-- **Monitoramento Contínuo:** Implementar um sistema de monitoramento contínuo para detectar e resolver problemas proativamente.
-- **Otimização de Custos:** Revisar periodicamente os custos e explorar opções de otimização, como instâncias reservadas ou savings plans, para reduzir gastos.
-- **Melhoria de Segurança:** Continuar melhorando as políticas de segurança e práticas recomendadas para proteger os dados e recursos da aplicação.
-- **Escalabilidade Horizontal:** Explorar técnicas de escalabilidade horizontal, como sharding no DynamoDB, para lidar com aumentos significativos de dados e tráfego.
+5. **Testes de Carga e Stress:** Os testes de carga realizados com Locust garantiram que a aplicação pudesse suportar altos volumes de tráfego e que o Auto Scaling está configurado corretamente.
 
 ### Agradecimentos
 
